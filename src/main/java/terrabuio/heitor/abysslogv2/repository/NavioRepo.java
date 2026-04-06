@@ -5,6 +5,6 @@ import org.springframework.stereotype.Repository;
 import terrabuio.heitor.abysslogv2.domain.Navio;
 
 @Repository
-public interface RepoNavio extends JpaRepository<Navio, Long>{
-    //--CRUD
+public interface NavioRepo extends JpaRepository<Navio, Long>{
+    /* --CRUD */
 }

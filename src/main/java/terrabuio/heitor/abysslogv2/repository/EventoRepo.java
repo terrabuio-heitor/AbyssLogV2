@@ -5,5 +5,5 @@ import org.springframework.stereotype.Repository;
 import terrabuio.heitor.abysslogv2.domain.Evento;
 
 @Repository
-public interface RepoEvento extends JpaRepository<Evento, Long> {
+public interface EventoRepo extends JpaRepository<Evento, Long> {
 }

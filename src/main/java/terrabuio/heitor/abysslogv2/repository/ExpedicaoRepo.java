@@ -6,5 +6,5 @@ import org.springframework.stereotype.Repository;
 import terrabuio.heitor.abysslogv2.domain.Expedicao;
 
 @Repository
-public interface RepoExpedicao extends JpaRepository<Expedicao, Long> {
+public interface ExpedicaoRepo extends JpaRepository<Expedicao, Long> {
 }

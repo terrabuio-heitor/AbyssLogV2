@@ -4,21 +4,21 @@ import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import terrabuio.heitor.abysslogv2.domain.Expedicao;
-import terrabuio.heitor.abysslogv2.repository.RepoExpedicao;
+import terrabuio.heitor.abysslogv2.repository.ExpedicaoRepo;
 
 import java.util.List;
 
 @Service
 @RequiredArgsConstructor
-public class ServiceExpedicao {
-    private final RepoExpedicao repoExpedicao;
+public class ExpedicaoService {
+    private final ExpedicaoRepo expedicaoRepo;
 
     public List<Expedicao> listarTodos(){
-        return repoExpedicao.findAll();
+        return expedicaoRepo.findAll();
     }
 
     public Expedicao buscarPorId(Long id){
-        return repoExpedicao.findById(id)
+        return expedicaoRepo.findById(id)
         .orElseThrow(() -> new RuntimeException("Expedição não encontrada!"));
     }
 
@@ -26,7 +26,7 @@ public class ServiceExpedicao {
         if(expedicao.getStatus() == null){
             expedicao.setStatus("Planejada");
         }
-        return repoExpedicao.save(expedicao);
+        return expedicaoRepo.save(expedicao);
     }
 
     public Expedicao atualizar(Long id, Expedicao dadosAtualizados) {
@@ -42,16 +42,16 @@ public class ServiceExpedicao {
             expedicaoExistente.setNavio(dadosAtualizados.getNavio());
         }
 
-        return repoExpedicao.save(expedicaoExistente);
+        return expedicaoRepo.save(expedicaoExistente);
     }
 
     @Transactional
     public void deletar(Long id) {
         // Lembre-se: No seu SQL você colocou ON DELETE CASCADE para eventos e recursos.
         // O banco vai apagar tudo que estiver ligado a essa expedição automaticamente.
-        if (!repoExpedicao.existsById(id)) {
+        if (!expedicaoRepo.existsById(id)) {
             throw new RuntimeException("Expedição não encontrada.");
         }
-        repoExpedicao.deleteById(id);
+        expedicaoRepo.deleteById(id);
     }
 }

@@ -5,22 +5,21 @@ import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import terrabuio.heitor.abysslogv2.domain.Navio;
-import terrabuio.heitor.abysslogv2.repository.RepoExpedicao;
-import terrabuio.heitor.abysslogv2.repository.RepoNavio;
+import terrabuio.heitor.abysslogv2.repository.NavioRepo;
 
 import java.util.List;
 
 @Service
 @RequiredArgsConstructor
-public class ServiceNavio {
-    private final RepoNavio repoNavio;
+public class NavioService {
+    private final NavioRepo navioRepo;
 
     public List<Navio> listarTodos(){
-        return repoNavio.findAll();
+        return navioRepo.findAll();
     }
 
     public Navio buscarPorId(Long id) {
-        return repoNavio.findById(id)
+        return navioRepo.findById(id)
                 .orElseThrow(() -> new RuntimeException("Navio não encontrado com o ID: " + id));
     }
 
@@ -28,13 +27,13 @@ public class ServiceNavio {
     public Navio salvar(Navio navio) {
         // Aqui você poderia colocar validações extras
         // Ex: navio.setStatus("ATIVO");
-        return repoNavio.save(navio);
+        return navioRepo.save(navio);
     }
 
     @Transactional
     public void deletar(Long id) {
         Navio navio = buscarPorId(id);
-        repoNavio.delete(navio);
+        navioRepo.delete(navio);
     }
 
     @Transactional
@@ -49,7 +48,7 @@ public class ServiceNavio {
         navioExistente.setResistencia(dadosAtualizados.getResistencia());
         navioExistente.setStatus(dadosAtualizados.getStatus());
 
-        return repoNavio.save(navioExistente);
+        return navioRepo.save(navioExistente);
     }
 
 }

@@ -4,7 +4,6 @@ import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import terrabuio.heitor.abysslogv2.domain.Monstro;
-import terrabuio.heitor.abysslogv2.domain.Navio;
 import terrabuio.heitor.abysslogv2.repository.MonstroRepo;
 
 import java.util.List;
@@ -20,7 +19,7 @@ public class MonstroService {
 
     public Monstro buscarPorId(Long id){
         return monstroRepo.findById(id)
-                .orElseThrow(() -> new RuntimeException("Expedição não encontrada!"));
+                .orElseThrow(() -> new RuntimeException("Monstro não encontrado!"));
     }
 
     public Monstro criar(Monstro monstro){

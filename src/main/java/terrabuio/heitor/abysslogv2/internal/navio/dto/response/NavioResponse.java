@@ -5,6 +5,9 @@ public record NavioResponse(
         String nome,
         String tipo,
         Integer capacidadeTripulacao,
-        Double capacidadeCarga,
+        Integer capacidadeCarga,
+        Integer velocidade,
+        Integer resistencia,
+        Integer anoFabricacao,
         String status
 ) {}

@@ -15,6 +15,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/navios")
 @RequiredArgsConstructor
+@CrossOrigin(origins = "*")
 public class NavioController {
     private final NavioService navioService;
 

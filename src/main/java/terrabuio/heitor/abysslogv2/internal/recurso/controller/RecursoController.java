@@ -3,10 +3,13 @@ package terrabuio.heitor.abysslogv2.internal.recurso.controller;
 
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import terrabuio.heitor.abysslogv2.internal.expedicao.domain.Expedicao;
 import terrabuio.heitor.abysslogv2.internal.recurso.domain.Recurso;
+import terrabuio.heitor.abysslogv2.internal.recurso.dto.request.RecursoRequest;
+import terrabuio.heitor.abysslogv2.internal.recurso.dto.response.RecursoResponse;
+import terrabuio.heitor.abysslogv2.internal.recurso.mapper.RecursoMapper;
 import terrabuio.heitor.abysslogv2.internal.recurso.services.RecursoService;
 
 import java.util.List;
@@ -17,14 +20,28 @@ import java.util.List;
 public class RecursoController {
     private final RecursoService recursoService;
 
+//    @GetMapping
+//    public List<Recurso> listar() {
+//        return recursoService.listarTodos();
+//    }
+//
+//    @PostMapping
+//    public ResponseEntity<Recurso> iniciar(@RequestBody @Valid Recurso recurso) {
+//        return ResponseEntity.status(HttpStatus.CREATED).body(recursoService.salvar(recurso));
+//    }
     @GetMapping
-    public List<Recurso> listar() {
-        return recursoService.listarTodos();
+    public List<RecursoResponse> listar(){
+        return recursoService.listarTodos()
+                .stream()
+                .map(RecursoMapper::toResponse)
+                .toList();
     }
-
     @PostMapping
-    public ResponseEntity<Recurso> iniciar(@RequestBody @Valid Recurso recurso) {
-        return ResponseEntity.status(HttpStatus.CREATED).body(recursoService.salvar(recurso));
+    public RecursoResponse cadastrar(@Valid @RequestBody RecursoRequest request){
+        Expedicao expedicao = new Expedicao();
+        Recurso recurso = RecursoMapper.toEntity(request, expedicao);
+        Recurso salvo = recursoService.salvar(recurso);
+        return RecursoMapper.toResponse(salvo);
     }
 
     @PutMapping("/{id}")

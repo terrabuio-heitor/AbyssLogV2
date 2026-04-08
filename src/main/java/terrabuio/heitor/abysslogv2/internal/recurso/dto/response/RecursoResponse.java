@@ -4,5 +4,5 @@ public record RecursoResponse(
         Long id,
         String nome,
         Integer quantidade,
-        Long idExpedicao
+        String nomeExpedicao
 ) {}

@@ -2,7 +2,6 @@ package terrabuio.heitor.abysslogv2.internal.expedicao.controller;
 
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import terrabuio.heitor.abysslogv2.internal.expedicao.dto.request.ExpedicaoRequest;
@@ -19,6 +18,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/expedicoes")
 @RequiredArgsConstructor
+@CrossOrigin(origins = "*")
 public class ExpedicaoController {
 
     private final ExpedicaoService expedicaoService;

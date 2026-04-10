@@ -34,8 +34,11 @@ public class Expedicao {
     private String capitao;
 
     @Temporal(TemporalType.DATE)
-    @NotNull(message = "A data de início é obrigatória")
+    //@NotNull(message = "A data de início é obrigatória")
     private Date dataInicio;
+
+    @Temporal(TemporalType.DATE)
+    private Date dataFim;
 
     private String status;
 

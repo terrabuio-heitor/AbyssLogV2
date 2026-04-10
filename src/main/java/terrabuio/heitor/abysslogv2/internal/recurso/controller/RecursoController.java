@@ -20,15 +20,7 @@ import java.util.List;
 public class RecursoController {
     private final RecursoService recursoService;
 
-//    @GetMapping
-//    public List<Recurso> listar() {
-//        return recursoService.listarTodos();
-//    }
-//
-//    @PostMapping
-//    public ResponseEntity<Recurso> iniciar(@RequestBody @Valid Recurso recurso) {
-//        return ResponseEntity.status(HttpStatus.CREATED).body(recursoService.salvar(recurso));
-//    }
+    //CRUD FUNCIONAL E Básico
     @GetMapping
     public List<RecursoResponse> listar(){
         return recursoService.listarTodos()

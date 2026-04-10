@@ -3,22 +3,44 @@ package terrabuio.heitor.abysslogv2.internal.tripulanteExpedicao.controller;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import terrabuio.heitor.abysslogv2.internal.tripulanteExpedicao.dto.request.TripulanteExpedicaoRequest;
+import terrabuio.heitor.abysslogv2.internal.tripulanteExpedicao.dto.response.TripulanteExpedicaoResponse;
+import terrabuio.heitor.abysslogv2.internal.tripulanteExpedicao.mapper.TripulanteExpedicaoMapper;
 import terrabuio.heitor.abysslogv2.internal.tripulanteExpedicao.services.TripulanteExpedicaoService;
 import terrabuio.heitor.abysslogv2.internal.tripulanteExpedicao.domain.TripulanteExpedicao;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/expedicoes/tripulantes")
 @RequiredArgsConstructor
 public class TripulanteExpedicaoController {
     private final TripulanteExpedicaoService service;
-
-    @PostMapping("/vincular")
-    public ResponseEntity<TripulanteExpedicao> vincular(@RequestBody TripulanteExpedicao vinculo) {
-        return ResponseEntity.ok(service.vincular(vinculo));
+    //GET Básico Read CRUD
+    @GetMapping
+    public List<TripulanteExpedicaoResponse> listar(){
+        return service.listar()
+                .stream()
+                .map(TripulanteExpedicaoMapper::toResponse)
+                .toList();
     }
 
-    @PutMapping("/desvincular/{id}")
-    public ResponseEntity<TripulanteExpedicao> desvincular(@PathVariable Long id) {
-        return ResponseEntity.ok(service.desvincular(id));
+    //Inicio dos USECASES ou casos de usos
+    @PostMapping("/vincular")
+    public TripulanteExpedicaoResponse vincular(@RequestBody TripulanteExpedicaoRequest request){
+        return service.vincular(request);
+    }
+
+
+    @PatchMapping("/{id}/finalizar")
+    public TripulanteExpedicaoResponse finalizar(@PathVariable Long id) {
+        TripulanteExpedicao vinculo = service.finalizar(id);
+
+        return TripulanteExpedicaoMapper.toResponse(vinculo);
+    }
+
+    @PutMapping("/apagar/{id}")
+    public ResponseEntity<TripulanteExpedicao> apagar(@PathVariable Long id) {
+        return ResponseEntity.ok(service.apagar(id));
     }
 }

@@ -11,13 +11,9 @@ import terrabuio.heitor.abysslogv2.internal.evento.mapper.EventoMapper;
 import terrabuio.heitor.abysslogv2.internal.evento.services.EventoService;
 import terrabuio.heitor.abysslogv2.internal.evento.domain.Evento;
 import terrabuio.heitor.abysslogv2.internal.expedicao.domain.Expedicao;
-import terrabuio.heitor.abysslogv2.internal.expedicao.dto.request.ExpedicaoRequest;
-import terrabuio.heitor.abysslogv2.internal.expedicao.dto.response.ExpedicaoResponse;
-import terrabuio.heitor.abysslogv2.internal.expedicao.mapper.ExpedicaoMapper;
 import terrabuio.heitor.abysslogv2.internal.expedicao.services.ExpedicaoService;
 import terrabuio.heitor.abysslogv2.internal.monstro.domain.Monstro;
 import terrabuio.heitor.abysslogv2.internal.monstro.services.MonstroService;
-import terrabuio.heitor.abysslogv2.internal.navio.domain.Navio;
 
 import java.util.List;
 
@@ -29,10 +25,7 @@ public class EventoController {
     private final ExpedicaoService expedicaoService;
     private final MonstroService monstroService;
 
-//    @GetMapping
-//    public List<Evento> listar() {
-//        return eventoService.buscarTodos();
-//    }
+    //CRUD FUNCIONAL E Básico
     @GetMapping
     public List<EventoResponse> listar(){
         return eventoService.buscarTodos()
@@ -45,12 +38,6 @@ public class EventoController {
     public ResponseEntity<Evento> atualizar(@PathVariable Long id, @RequestBody @Valid Evento evento) {
         return ResponseEntity.ok(eventoService.atualizar(id, evento));
     }
-
-//    @PostMapping
-//    public ResponseEntity<Evento> iniciar(@RequestBody @Valid Evento evento) {
-//        return ResponseEntity.status(HttpStatus.CREATED).body(eventoService.salvar(evento));
-//    }
-
     @PostMapping
     public EventoResponse iniciar(@RequestBody @Valid EventoRequest request){
         Expedicao expedicao = expedicaoService.buscarPorId(request.idExpedicao());
@@ -71,9 +58,8 @@ public class EventoController {
         eventoService.remover(id);
         return ResponseEntity.noContent().build();
     }
-    ///
     @PatchMapping("/{id}/adicionar-monstros")
     public ResponseEntity<Evento> adicionarMonstros(@PathVariable Long id, @RequestBody List<Long> monstrosIds) {
         return ResponseEntity.ok(eventoService.adicionarMonstrosAoEvento(id, monstrosIds));
-    }///
+    }
 }

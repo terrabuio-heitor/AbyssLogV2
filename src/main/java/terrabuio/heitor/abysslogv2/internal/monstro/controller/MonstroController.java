@@ -16,6 +16,7 @@ import java.util.List;
 public class MonstroController {
     private final MonstroService monstroService;
 
+    //CRUD FUNCIONAL E Básico
     @GetMapping
     public List<Monstro> listar() {
         return monstroService.listarTodos();

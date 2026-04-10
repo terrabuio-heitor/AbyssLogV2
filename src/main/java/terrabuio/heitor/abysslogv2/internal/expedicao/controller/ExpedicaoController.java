@@ -24,15 +24,8 @@ public class ExpedicaoController {
     private final ExpedicaoService expedicaoService;
     private final NavioService navioService;
 
-//    @GetMapping
-//    public List<Expedicao> listar() {
-//        return expedicaoService.listarTodos();
-//
-//    }
-//    @GetMapping("/{id}")
-//    public ResponseEntity<Expedicao> buscarPorId(@PathVariable Long id) {
-//        return ResponseEntity.ok(expedicaoService.buscarPorId(id));
-//    }
+    //CRUD FUNCIONAL E Básico
+
     @GetMapping
     public List<ExpedicaoResponse> listar() {
         return expedicaoService.listarTodos()
@@ -47,10 +40,6 @@ public class ExpedicaoController {
         return ResponseEntity.ok(ExpedicaoMapper.toResponse(expedicao));
     }
 
-//    @PostMapping
-//    public ResponseEntity<Expedicao> iniciar(@RequestBody @Valid Expedicao expedicao) {
-//        return ResponseEntity.status(HttpStatus.CREATED).body(expedicaoService.iniciar(expedicao));
-//    }
     @PostMapping
     public ExpedicaoResponse iniciar(@RequestBody @Valid ExpedicaoRequest request){
         Navio navio = navioService.buscarPorId(request.idNavio());
@@ -61,14 +50,10 @@ public class ExpedicaoController {
         
         return ExpedicaoMapper.toResponse(salva);
     }
-
-
-
     @PutMapping("/{id}")
     public ResponseEntity<Expedicao> atualizar(@PathVariable Long id, @RequestBody @Valid Expedicao expedicao) {
         return ResponseEntity.ok(expedicaoService.atualizar(id, expedicao));
     }
-
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> encerrar(@PathVariable Long id) {
         expedicaoService.deletar(id);

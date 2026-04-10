@@ -19,15 +19,8 @@ import java.util.List;
 public class NavioController {
     private final NavioService navioService;
 
-//    @GetMapping
-//    public List<Navio> listar() {
-//        return navioService.listarTodos();
-//    }
-//
-//    @GetMapping("/{id}")
-//    public ResponseEntity<Navio> buscar(@PathVariable Long id) {
-//        return ResponseEntity.ok(navioService.buscarPorId(id));
-//    }
+
+    //CRUD FUNCIONAL E Básico
     @GetMapping
     public List<NavioResponse> listar() {
         return navioService.listarTodos()
@@ -41,11 +34,6 @@ public class NavioController {
         Navio navio = navioService.buscarPorId(id);
         return ResponseEntity.ok(NavioMapper.toResponse(navio));
     }
-
-//    @PostMapping
-//    public ResponseEntity<Navio> criar(@RequestBody @Valid Navio navio) {
-//        return ResponseEntity.status(HttpStatus.CREATED).body(navioService.salvar(navio));
-//    }
     @PostMapping
     public NavioResponse criar(@RequestBody @Valid NavioRequest request){
         Navio navio = NavioMapper.toEntity(request);
@@ -54,9 +42,6 @@ public class NavioController {
 
         return NavioMapper.toResponse(salva);
     }
-
-
-
     @PutMapping("/{id}")
     public ResponseEntity<Navio> atualizar(@PathVariable Long id, @RequestBody @Valid Navio navio) {
         return ResponseEntity.ok(navioService.atualizar(id, navio));

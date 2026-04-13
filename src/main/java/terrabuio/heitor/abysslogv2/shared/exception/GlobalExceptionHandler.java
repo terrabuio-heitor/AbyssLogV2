@@ -1,5 +1,6 @@
 package terrabuio.heitor.abysslogv2.shared.exception;
 
+import org.springframework.context.support.DefaultMessageSourceResolvable;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -18,7 +19,7 @@ public class GlobalExceptionHandler {
         List<String> erros = ex.getBindingResult()
                 .getFieldErrors()
                 .stream()
-                .map(e -> e.getDefaultMessage())
+                .map(DefaultMessageSourceResolvable::getDefaultMessage)
                 .toList();
         return new ErroResponse (
                 400,

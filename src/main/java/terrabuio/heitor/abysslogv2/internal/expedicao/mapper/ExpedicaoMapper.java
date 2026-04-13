@@ -23,7 +23,7 @@ public class ExpedicaoMapper {
                 expedicao.getNavio() != null ? expedicao.getNavio().getNome() : null,
                 expedicao.getCapitao(),
                 expedicao.getDataInicio(),
-                expedicao.getStatus()
+                expedicao.getStatus().getDescricao()
         );
     }
 }

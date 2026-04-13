@@ -92,3 +92,6 @@
 		(ativo = false AND data_saida IS NOT NULL)
 		)
 		);`
+
+//Correções e alterações
+    `alter table if exists expedicoes add column data_fim date`

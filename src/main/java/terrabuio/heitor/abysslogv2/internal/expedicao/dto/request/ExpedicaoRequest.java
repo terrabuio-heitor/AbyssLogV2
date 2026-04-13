@@ -2,6 +2,7 @@ package terrabuio.heitor.abysslogv2.internal.expedicao.dto.request;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
+import terrabuio.heitor.abysslogv2.internal.expedicao.domain.Expedicao;
 
 public record ExpedicaoRequest(
         @NotBlank(message = "O nome é obrigatório")
@@ -12,5 +13,6 @@ public record ExpedicaoRequest(
         String capitao,
         @NotNull(message = "A data de início é obrigatória")
         java.util.Date dataInicio,
-        String status
+        Expedicao.StatusExpedicao status
+        //String status
 ) {}

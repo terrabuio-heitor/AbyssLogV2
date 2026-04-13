@@ -6,6 +6,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import terrabuio.heitor.abysslogv2.internal.expedicao.domain.Expedicao;
+import terrabuio.heitor.abysslogv2.internal.expedicao.services.ExpedicaoService;
 import terrabuio.heitor.abysslogv2.internal.recurso.domain.Recurso;
 import terrabuio.heitor.abysslogv2.internal.recurso.dto.request.RecursoRequest;
 import terrabuio.heitor.abysslogv2.internal.recurso.dto.response.RecursoResponse;
@@ -19,7 +20,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class RecursoController {
     private final RecursoService recursoService;
-
+    private final ExpedicaoService expedicaoService;
     //CRUD FUNCIONAL E Básico
     @GetMapping
     public List<RecursoResponse> listar(){
@@ -30,7 +31,8 @@ public class RecursoController {
     }
     @PostMapping
     public RecursoResponse cadastrar(@Valid @RequestBody RecursoRequest request){
-        Expedicao expedicao = new Expedicao();
+        //Expedicao expedicao = new Expedicao();
+        Expedicao expedicao = expedicaoService.buscarPorId(request.idExpedicao());
         Recurso recurso = RecursoMapper.toEntity(request, expedicao);
         Recurso salvo = recursoService.salvar(recurso);
         return RecursoMapper.toResponse(salvo);

@@ -40,8 +40,30 @@ public class Expedicao {
     @Temporal(TemporalType.DATE)
     private Date dataFim;
 
-    private String status;
+    //private String status;
+    @Enumerated(EnumType.STRING)
+    private StatusExpedicao status ;
 
     @OneToMany(mappedBy = "expedicao", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Evento> eventos;
+
+    //STATUS Expedicão
+    public enum StatusExpedicao {
+        PLANEJADA("Planejada"),
+        PREPARANDO("Preparando"),
+        PARADA("Parada"),
+        ANDAMENTO("No Mar"),
+        FINALIZADA("Finalizada"),
+        INTERROMPIDA("Interrompida");
+
+        private final String descricao;
+
+        StatusExpedicao(String descricao) {
+            this.descricao = descricao;
+        }
+        public String getDescricao() {
+            return descricao;
+        }
+    }
 }
+

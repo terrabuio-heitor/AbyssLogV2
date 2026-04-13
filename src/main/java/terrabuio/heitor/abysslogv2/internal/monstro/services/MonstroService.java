@@ -37,7 +37,7 @@ public class MonstroService {
         Monstro monstroExistente = buscarPorId(id);
 
         monstroExistente.setNome(dadosAtualizados.getNome());
-        monstroExistente.setDescricao(dadosAtualizados.getNome());
+        monstroExistente.setDescricao(dadosAtualizados.getDescricao());
         monstroExistente.setNivelPerigo(dadosAtualizados.getNivelPerigo());
 
         return monstroRepo.save(monstroExistente);

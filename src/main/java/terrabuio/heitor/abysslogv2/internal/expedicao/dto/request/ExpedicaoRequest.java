@@ -12,7 +12,7 @@ public record ExpedicaoRequest(
         @NotBlank(message = "O capitão é obrigatório")
         String capitao,
         @NotNull(message = "A data de início é obrigatória")
-        java.util.Date dataInicio,
-        Expedicao.StatusExpedicao status
+        java.util.Date dataInicio
+        //Expedicao.StatusExpedicao status
         //String status
 ) {}

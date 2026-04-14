@@ -23,9 +23,6 @@ public class ExpedicaoService {
     }
 
     public Expedicao iniciar(Expedicao expedicao){
-        if(expedicao.getStatus() == null){
-            expedicao.setStatus(Expedicao.StatusExpedicao.PLANEJADA);
-        }
         return expedicaoRepo.save(expedicao);
     }
 

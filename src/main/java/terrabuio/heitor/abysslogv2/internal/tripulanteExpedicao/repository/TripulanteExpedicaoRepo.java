@@ -9,4 +9,5 @@ import java.util.List;
 @Repository
 public interface TripulanteExpedicaoRepo extends JpaRepository<TripulanteExpedicao,Long> {
     List<TripulanteExpedicaoRepo> findByExpedicaoIdAndAtivoTrue(Long expedicaoId);
+    long countByExpedicaoIdAndAtivoTrue(Long expedicaoId);
 }

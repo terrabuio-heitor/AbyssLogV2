@@ -38,9 +38,9 @@ public class AtribuirTripulante {
             throw new RuntimeException("Expedição sem navio");
         }
 
-        if (tripulante.isAtivo()) {
-            throw new RuntimeException("Tripulante já está em uma expedição");
-        }
+//        if (tripulante.isAtivo()) {
+//            throw new RuntimeException("Tripulante já está em uma expedição");
+//        }
 
         if (expedicao.getStatus() != Expedicao.StatusExpedicao.PREPARANDO &&
                 expedicao.getStatus() != Expedicao.StatusExpedicao.PARADA) {
@@ -53,7 +53,7 @@ public class AtribuirTripulante {
             throw new RuntimeException("Capacidade do navio atingida");
         }
 
-        tripulante.setAtivo(true);
+        //tripulante.setAtivo(true);
         TripulanteExpedicao te = new TripulanteExpedicao();
         te.setTripulante(tripulante);
         te.setDataEntrada(LocalDate.now());

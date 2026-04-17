@@ -13,7 +13,6 @@ public class ExpedicaoMapper {
         expedicao.setNavio(navio); // vem do service ou controller
         expedicao.setCapitao(request.capitao());
         expedicao.setDataInicio(request.dataInicio());
-        expedicao.setStatus(request.status());
         return expedicao;
     }
     public static ExpedicaoResponse toResponse(Expedicao expedicao) {

@@ -16,6 +16,4 @@ public class Tripulante{
     private String nome;
 
     private String cargo;
-
-    private boolean ativo;
 }

@@ -9,6 +9,8 @@ import terrabuio.heitor.abysslogv2.internal.navio.domain.Navio;
 import terrabuio.heitor.abysslogv2.internal.navio.services.NavioService;
 import terrabuio.heitor.abysslogv2.internal.tripulanteExpedicao.repository.TripulanteExpedicaoRepo;
 
+import java.util.Objects;
+
 @Service
 @RequiredArgsConstructor
 public class AtribuirNavio {
@@ -20,6 +22,7 @@ public class AtribuirNavio {
     public void executar(Long navioId, Long expedicaoId){
         Navio navio = navioService.buscarPorId(navioId);
         Expedicao expedicao = expedicaoService.buscarPorId(expedicaoId);
+        long tripulantes = teRepo.countByExpedicaoIdAndAtivoTrue(expedicaoId);
 
         //Validação Basica
         if (navio == null) {
@@ -30,11 +33,10 @@ public class AtribuirNavio {
             throw new RuntimeException("Expedição não encontrada");
         }
         //Vejo se o navio tá ok
-        if(navio.getStatus() != "Disponível"){
+        if(!Objects.equals(navio.getStatus(), "Disponível")){
             throw new RuntimeException("Navio Indisponível");
         }
 
-        long tripulantes = teRepo.countByExpedicaoIdAndAtivoTrue(expedicaoId);
         if (tripulantes > navio.getCapacidadeTripulacao()) {
             throw new RuntimeException("Novo navio não suporta a tripulação atual");
         }

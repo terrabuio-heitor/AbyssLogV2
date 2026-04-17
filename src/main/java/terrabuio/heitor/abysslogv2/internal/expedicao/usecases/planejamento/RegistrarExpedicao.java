@@ -16,6 +16,7 @@ public class RegistrarExpedicao {
         } else {
             expedicao.setStatus(Expedicao.StatusExpedicao.PLANEJADA);
         }
+
         return expedicaoService.iniciar(expedicao);
     }
 }

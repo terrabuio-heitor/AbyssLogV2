@@ -1,5 +1,6 @@
 package terrabuio.heitor.abysslogv2.internal.expedicao.controller;
 
+import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -39,7 +40,7 @@ public class ExpedicaoController {
         Expedicao expedicao = expedicaoService.buscarPorId(id);
         return ResponseEntity.ok(ExpedicaoMapper.toResponse(expedicao));
     }
-
+    @Transactional
     @PostMapping
     public ExpedicaoResponse iniciar(@RequestBody @Valid ExpedicaoRequest request){
         Navio navio = navioService.buscarPorId(request.idNavio());
@@ -50,10 +51,12 @@ public class ExpedicaoController {
         
         return ExpedicaoMapper.toResponse(salva);
     }
+    @Transactional
     @PutMapping("/{id}")
     public ResponseEntity<Expedicao> atualizar(@PathVariable Long id, @RequestBody @Valid Expedicao expedicao) {
         return ResponseEntity.ok(expedicaoService.atualizar(id, expedicao));
     }
+    @Transactional
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> encerrar(@PathVariable Long id) {
         expedicaoService.deletar(id);

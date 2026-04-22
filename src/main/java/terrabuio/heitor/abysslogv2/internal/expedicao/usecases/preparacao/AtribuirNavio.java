@@ -1,6 +1,7 @@
 package terrabuio.heitor.abysslogv2.internal.expedicao.usecases.preparacao;
 
 
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import terrabuio.heitor.abysslogv2.internal.expedicao.domain.Expedicao;
@@ -18,7 +19,7 @@ public class AtribuirNavio {
     private final NavioService navioService;
 
     private final TripulanteExpedicaoRepo teRepo;
-
+    @Transactional
     public void executar(Long navioId, Long expedicaoId){
         Navio navio = navioService.buscarPorId(navioId);
         Expedicao expedicao = expedicaoService.buscarPorId(expedicaoId);

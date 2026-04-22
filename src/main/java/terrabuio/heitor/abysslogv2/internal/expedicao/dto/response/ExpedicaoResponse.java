@@ -1,10 +1,12 @@
 package terrabuio.heitor.abysslogv2.internal.expedicao.dto.response;
 
+import java.time.LocalDate;
+
 public record ExpedicaoResponse(
         Long id,
         String nome,
         String nomeNavio,
         String capitao,
-        java.util.Date dataInicio,
+        LocalDate dataInicio,
         String status
 ) {}

@@ -1,5 +1,6 @@
 package terrabuio.heitor.abysslogv2.internal.expedicao.domain;
 
+import java.time.LocalDate;
 import java.util.Date;
 import java.util.List;
 
@@ -7,8 +8,12 @@ import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
+import jdk.jfr.Registered;
 import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.RequiredArgsConstructor;
+import org.hibernate.annotations.JdbcType;
 import terrabuio.heitor.abysslogv2.internal.navio.domain.Navio;
 import terrabuio.heitor.abysslogv2.internal.evento.domain.Evento;
 
@@ -33,12 +38,10 @@ public class Expedicao {
     @NotBlank(message = "O capitao é obrigatório")
     private String capitao;
 
-    @Temporal(TemporalType.DATE)
     //@NotNull(message = "A data de início é obrigatória")
-    private Date dataInicio;
+    private LocalDate dataInicio;
 
-    @Temporal(TemporalType.DATE)
-    private Date dataFim;
+    private LocalDate dataFim;
 
     //private String status;
     @Enumerated(EnumType.STRING)
@@ -48,6 +51,8 @@ public class Expedicao {
     private List<Evento> eventos;
 
     //STATUS Expedicão
+    @Getter
+    @RequiredArgsConstructor
     public enum StatusExpedicao {
         PLANEJADA("Planejada"),
         PREPARANDO("Preparando"),
@@ -55,15 +60,7 @@ public class Expedicao {
         ANDAMENTO("No Mar"),
         FINALIZADA("Finalizada"),
         INTERROMPIDA("Interrompida");
-
         private final String descricao;
-
-        StatusExpedicao(String descricao) {
-            this.descricao = descricao;
-        }
-        public String getDescricao() {
-            return descricao;
-        }
     }
 }
 

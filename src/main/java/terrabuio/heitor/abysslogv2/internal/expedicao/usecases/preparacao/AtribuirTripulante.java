@@ -1,5 +1,6 @@
 package terrabuio.heitor.abysslogv2.internal.expedicao.usecases.preparacao;
 
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -20,7 +21,7 @@ public class AtribuirTripulante {
     private final TripulanteService tripulanteService;
     //private final TripulanteExpedicaoService teService;
     private final TripulanteExpedicaoRepo repo;
-
+    @Transactional
     public void executar(Long tripulanteId, Long expedicaoId){
 
         Tripulante tripulante = tripulanteService.buscarPorId(tripulanteId);

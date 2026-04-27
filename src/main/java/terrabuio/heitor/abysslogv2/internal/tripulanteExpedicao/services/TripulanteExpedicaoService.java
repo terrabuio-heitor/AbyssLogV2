@@ -15,6 +15,7 @@ import terrabuio.heitor.abysslogv2.internal.tripulanteExpedicao.repository.Tripu
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -34,7 +35,7 @@ public class TripulanteExpedicaoService {
     }
 
     @Transactional
-    public TripulanteExpedicao apagar(Long id) {
+    public TripulanteExpedicao desvincular(Long id) {
         TripulanteExpedicao vinculo = triExRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Vínculo não encontrado"));
         vinculo.setAtivo(false);
@@ -47,17 +48,15 @@ public class TripulanteExpedicaoService {
     }
 
     @Transactional
-    public TripulanteExpedicao finalizar(Long id) {
-        TripulanteExpedicao vinculo = triExRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Vínculo não encontrado"));
-
-        if (!vinculo.getAtivo()) {
-            throw new RuntimeException("Vínculo já está finalizado");
+    public void remover(Long id) {
+        // Verificamos se existe antes de tentar deletar para não estourar erro feio de SQL
+        if (!triExRepository.existsById(id)) {
+            throw new RuntimeException("Vínculo não encontrado para remoção física.");
         }
+        triExRepository.deleteById(id);
+    }
 
-        vinculo.setAtivo(false);
-        vinculo.setDataSaida(LocalDate.now());
-
-        return triExRepository.save(vinculo);
+    public Optional<TripulanteExpedicao> buscarPorTripulanteNaExpedicao(Long TripulanteId, Long ExpedicaoId) {
+        return triExRepository.findByTripulanteIdAndExpedicaoIdAndAtivoTrue(TripulanteId, ExpedicaoId);
     }
 }

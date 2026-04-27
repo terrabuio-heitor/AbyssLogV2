@@ -3,6 +3,7 @@ package terrabuio.heitor.abysslogv2.internal.tripulanteExpedicao.controller;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import terrabuio.heitor.abysslogv2.internal.expedicao.usecases.preparacao.RemoverTripulante;
 import terrabuio.heitor.abysslogv2.internal.tripulanteExpedicao.dto.request.TripulanteExpedicaoRequest;
 import terrabuio.heitor.abysslogv2.internal.tripulanteExpedicao.dto.response.TripulanteExpedicaoResponse;
 import terrabuio.heitor.abysslogv2.internal.tripulanteExpedicao.mapper.TripulanteExpedicaoMapper;
@@ -16,6 +17,8 @@ import java.util.List;
 @RequiredArgsConstructor
 public class TripulanteExpedicaoController {
     private final TripulanteExpedicaoService service;
+    private final RemoverTripulante removerTripulante;
+
     //GET Básico Read CRUD
     @GetMapping
     public List<TripulanteExpedicaoResponse> listar(){
@@ -34,13 +37,14 @@ public class TripulanteExpedicaoController {
 
     @PatchMapping("/{id}/finalizar")
     public TripulanteExpedicaoResponse finalizar(@PathVariable Long id) {
-        TripulanteExpedicao vinculo = service.finalizar(id);
+        TripulanteExpedicao vinculo = service.desvincular(id);
 
         return TripulanteExpedicaoMapper.toResponse(vinculo);
     }
 
-    @PutMapping("/apagar/{id}")
-    public ResponseEntity<TripulanteExpedicao> apagar(@PathVariable Long id) {
-        return ResponseEntity.ok(service.apagar(id));
+    @DeleteMapping("/tripulante/{idTripulante}/expedicao/{idExpedicao}")
+    public ResponseEntity<Void> remover(@PathVariable Long idTripulante, @PathVariable Long idExpedicao) {
+        removerTripulante.executar(idTripulante, idExpedicao);
+        return ResponseEntity.noContent().build();
     }
 }

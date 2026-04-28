@@ -47,6 +47,12 @@ public class TripulanteExpedicaoService {
         return triExRepository.findAll();
     }
 
+    public List<TripulanteExpedicao> listarExpedicao(Long idExpedicao)
+    {
+        return triExRepository.findByExpedicaoIdAndAtivoTrue(idExpedicao);
+    }
+
+
     @Transactional
     public void remover(Long id) {
         // Verificamos se existe antes de tentar deletar para não estourar erro feio de SQL

@@ -1,5 +1,6 @@
 package terrabuio.heitor.abysslogv2.internal.expedicao.usecases.execucao;
 
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import terrabuio.heitor.abysslogv2.internal.expedicao.domain.Expedicao;
@@ -9,6 +10,7 @@ import terrabuio.heitor.abysslogv2.internal.expedicao.services.ExpedicaoService;
 @RequiredArgsConstructor
 public class PausarExpedicao{
     private final ExpedicaoService expedicaoService;
+    @Transactional
     public void executar(Long Id){
         Expedicao ex = expedicaoService.buscarPorId(Id);
         if(ex.getStatus() != Expedicao.StatusExpedicao.ANDAMENTO){

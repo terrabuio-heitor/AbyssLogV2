@@ -6,10 +6,8 @@ import org.springframework.stereotype.Service;
 import terrabuio.heitor.abysslogv2.internal.expedicao.domain.Expedicao;
 import terrabuio.heitor.abysslogv2.internal.expedicao.services.ExpedicaoService;
 import terrabuio.heitor.abysslogv2.internal.tripulanteExpedicao.repository.TripulanteExpedicaoRepo;
-import terrabuio.heitor.abysslogv2.internal.tripulanteExpedicao.services.TripulanteExpedicaoService;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 
 @Service
 @RequiredArgsConstructor

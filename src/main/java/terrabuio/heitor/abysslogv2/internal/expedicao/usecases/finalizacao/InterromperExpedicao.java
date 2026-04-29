@@ -32,6 +32,8 @@ public class InterromperExpedicao {
                 ex.setDataFim(LocalDate.now());
                 break;
             default:
+                ex.setStatus(Expedicao.StatusExpedicao.INTERROMPIDA);
+                ex.setDataFim(LocalDate.now());
                 //--Ainda não tem.
                 //--Vou colocar mais conforme for surgindo a necessidade;
         }

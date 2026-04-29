@@ -6,10 +6,12 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import terrabuio.heitor.abysslogv2.internal.expedicao.dto.request.ExpedicaoRequest;
+import terrabuio.heitor.abysslogv2.internal.expedicao.dto.response.DiarioBordoResponse;
 import terrabuio.heitor.abysslogv2.internal.expedicao.dto.response.ExpedicaoResponse;
 import terrabuio.heitor.abysslogv2.internal.expedicao.mapper.ExpedicaoMapper;
 import terrabuio.heitor.abysslogv2.internal.expedicao.services.ExpedicaoService;
 import terrabuio.heitor.abysslogv2.internal.expedicao.domain.Expedicao;
+import terrabuio.heitor.abysslogv2.internal.expedicao.usecases.finalizacao.GerarDiarioDeBordo;
 import terrabuio.heitor.abysslogv2.internal.navio.domain.Navio;
 import terrabuio.heitor.abysslogv2.internal.navio.services.NavioService;
 
@@ -24,6 +26,7 @@ public class ExpedicaoController {
 
     private final ExpedicaoService expedicaoService;
     private final NavioService navioService;
+    private final GerarDiarioDeBordo gerarDiarioDeBordo;
 
     //CRUD FUNCIONAL E Básico
 
@@ -40,6 +43,12 @@ public class ExpedicaoController {
         Expedicao expedicao = expedicaoService.buscarPorId(id);
         return ResponseEntity.ok(ExpedicaoMapper.toResponse(expedicao));
     }
+
+    @GetMapping("/{id}/gerarDiarioDeBordo")
+    public DiarioBordoResponse gerarDiario(@PathVariable Long id){
+        return gerarDiarioDeBordo.executar(id);
+    }
+
     @Transactional
     @PostMapping
     public ExpedicaoResponse iniciar(@RequestBody @Valid ExpedicaoRequest request){

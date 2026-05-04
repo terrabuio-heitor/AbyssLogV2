@@ -19,10 +19,10 @@ import terrabuio.heitor.abysslogv2.internal.navio.services.NavioService;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/expedicoes")
+@RequestMapping("/api/legacy/expedicoes")
 @RequiredArgsConstructor
 @CrossOrigin(origins = "*")
-public class ExpedicaoController {
+public class ExpedicaoControllerLegacy {
 
     private final ExpedicaoService expedicaoService;
     private final NavioService navioService;
@@ -49,7 +49,6 @@ public class ExpedicaoController {
         return gerarDiarioDeBordo.executar(id);
     }
 
-    @Transactional
     @PostMapping
     public ExpedicaoResponse iniciar(@RequestBody @Valid ExpedicaoRequest request){
         Navio navio = navioService.buscarPorId(request.idNavio());
@@ -60,12 +59,12 @@ public class ExpedicaoController {
         
         return ExpedicaoMapper.toResponse(salva);
     }
-    @Transactional
+
     @PutMapping("/{id}")
     public ResponseEntity<Expedicao> atualizar(@PathVariable Long id, @RequestBody @Valid Expedicao expedicao) {
         return ResponseEntity.ok(expedicaoService.atualizar(id, expedicao));
     }
-    @Transactional
+
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> encerrar(@PathVariable Long id) {
         expedicaoService.deletar(id);

@@ -28,7 +28,9 @@ public class IniciarExpedicao {
         if(tripulantes > 1){
             throw new RuntimeException("Navio com fantasmas como tripulantes não zarpa do porto amigo");
         }
-        expedicao.setDataInicio(LocalDate.now());
+        if (expedicao.getStatus() == Expedicao.StatusExpedicao.PREPARANDO) {
+            expedicao.setDataInicio(LocalDate.now());
+        }
         expedicao.setStatus(Expedicao.StatusExpedicao.ANDAMENTO);
     }
 }

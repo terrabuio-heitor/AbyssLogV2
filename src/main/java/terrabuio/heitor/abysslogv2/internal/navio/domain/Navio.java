@@ -2,6 +2,7 @@ package terrabuio.heitor.abysslogv2.internal.navio.domain;
 
 import jakarta.persistence.*;
 import lombok.Data;
+import lombok.RequiredArgsConstructor;
 
 @Data
 @Entity
@@ -25,5 +26,14 @@ public class Navio{
 
     private Integer anoFabricacao;
 
-    private String status;
+    private StatusNavio status;
+
+    @RequiredArgsConstructor
+    private enum StatusNavio{
+        MANUTENCAO ("Em manutenção"),
+        ATIVO ("Em Atividade"),
+        DISPONIVEL ("Disponível"),
+        NAUFRAGADO ("No fundo do Mar");
+        private final String descricao;
+    }
 }

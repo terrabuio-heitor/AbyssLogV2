@@ -4,6 +4,8 @@ import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import terrabuio.heitor.abysslogv2.internal.expedicao.domain.Expedicao;
+import terrabuio.heitor.abysslogv2.internal.expedicao.dto.response.ExpedicaoResponse;
+import terrabuio.heitor.abysslogv2.internal.expedicao.mapper.ExpedicaoMapper;
 import terrabuio.heitor.abysslogv2.internal.expedicao.repository.ExpedicaoRepo;
 
 import java.util.List;
@@ -16,6 +18,9 @@ public class ExpedicaoService {
     public List<Expedicao> listarTodos(){
         return expedicaoRepo.findAll();
     }
+    public List<ExpedicaoResponse> listarTodosResponse(){
+        return expedicaoRepo.findAll().stream().map(ExpedicaoMapper:: toResponse).toList();
+    }
 
     public Expedicao buscarPorId(Long id){
         return expedicaoRepo.findById(id)
@@ -23,7 +28,6 @@ public class ExpedicaoService {
     }
 
     public Expedicao iniciar(Expedicao expedicao){
-        expedicao.setStatus(Expedicao.StatusExpedicao.PLANEJADA);
         return expedicaoRepo.save(expedicao);
     }
 

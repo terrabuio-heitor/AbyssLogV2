@@ -9,7 +9,7 @@ import java.time.LocalDate;
 public record ExpedicaoRequest(
         @NotBlank(message = "O nome é obrigatório")
         String nome,
-        @NotNull(message = "O ID do navio é obrigatório")
+        //@NotNull(message = "O ID do navio é obrigatório")
         Long idNavio,
         @NotBlank(message = "O capitão é obrigatório")
         String capitao,

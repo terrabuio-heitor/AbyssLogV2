@@ -38,9 +38,9 @@ public class EventoController {
     public ResponseEntity<Evento> atualizar(@PathVariable Long id, @RequestBody @Valid Evento evento) {
         return ResponseEntity.ok(eventoService.atualizar(id, evento));
     }
-    @PostMapping
-    public EventoResponse iniciar(@RequestBody @Valid EventoRequest request){
-        Expedicao expedicao = expedicaoService.buscarPorId(request.idExpedicao());
+    @PostMapping("/{idExpedicao}")
+    public EventoResponse iniciar(@RequestBody @Valid EventoRequest request, @PathVariable Long idExpedicao) {
+        Expedicao expedicao = expedicaoService.buscarPorId(idExpedicao);
 
         List<Monstro> monstros = request.monstroId() != null
                 ? monstroService.buscarPorIds(request.monstroId())

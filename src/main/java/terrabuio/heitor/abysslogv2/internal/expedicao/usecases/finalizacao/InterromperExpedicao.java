@@ -7,6 +7,7 @@ import terrabuio.heitor.abysslogv2.internal.evento.domain.Evento;
 import terrabuio.heitor.abysslogv2.internal.evento.services.EventoService;
 import terrabuio.heitor.abysslogv2.internal.expedicao.domain.Expedicao;
 import terrabuio.heitor.abysslogv2.internal.expedicao.services.ExpedicaoService;
+import terrabuio.heitor.abysslogv2.internal.navio.domain.Navio;
 import terrabuio.heitor.abysslogv2.internal.navio.services.NavioService;
 
 import java.time.LocalDate;
@@ -27,7 +28,7 @@ public class InterromperExpedicao {
         Evento ev = eventoService.buscarPorId(eventoId);
         switch (ev.getTipo()) {
             case "Naúfragio":
-                navioService.buscarPorId(ex.getNavio().getId()).setStatus("Nas profundezas do Mar 💀");
+                navioService.buscarPorId(ex.getNavio().getId()).setStatus(Navio.StatusNavio.NAUFRAGADO);
                 ex.setStatus(Expedicao.StatusExpedicao.INTERROMPIDA);
                 ex.setDataFim(LocalDate.now());
                 break;

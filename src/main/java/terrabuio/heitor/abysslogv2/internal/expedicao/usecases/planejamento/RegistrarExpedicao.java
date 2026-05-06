@@ -20,18 +20,17 @@ public class RegistrarExpedicao {
         Navio navio = null;
         if (request.idNavio() != null) {
             navio = navioService.buscarPorId(request.idNavio());
-            if (!navio.getStatus().equals("DISPONIVEL")) {
+            if (!(navio.getStatus() == Navio.StatusNavio.ATIVO)) {
                 throw new RuntimeException("Navio " + navio.getNome() + " não está disponível no momento");
             }
         }
         Expedicao expedicao = ExpedicaoMapper.toEntity(request, navio);
         if (navio != null) {
             expedicao.setStatus(Expedicao.StatusExpedicao.PREPARANDO);
-            navio.setStatus("ATIVO");
+            navio.setStatus(Navio.StatusNavio.ATIVO);
         } else {
             expedicao.setStatus(Expedicao.StatusExpedicao.PLANEJADA);
         }
-        Expedicao validada = expedicao;
-        return expedicaoService.iniciar(validada);
+        return expedicaoService.iniciar(expedicao);
     }
 }

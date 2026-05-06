@@ -22,6 +22,11 @@ public class ExpedicaoService {
         return expedicaoRepo.findAll().stream().map(ExpedicaoMapper:: toResponse).toList();
     }
 
+    public ExpedicaoResponse buscarPorIdResponse(Long id){
+        return expedicaoRepo.findById(id)
+                .map(ExpedicaoMapper:: toResponse)
+                .orElseThrow(() -> new RuntimeException("Expedição não encontrada!"));
+    }
     public Expedicao buscarPorId(Long id){
         return expedicaoRepo.findById(id)
         .orElseThrow(() -> new RuntimeException("Expedição não encontrada!"));

@@ -2,31 +2,38 @@ package terrabuio.heitor.abysslogv2.internal.expedicao.controller;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import terrabuio.heitor.abysslogv2.internal.evento.domain.Evento;
+import terrabuio.heitor.abysslogv2.internal.evento.dto.request.EventoRequest;
+import terrabuio.heitor.abysslogv2.internal.evento.dto.response.EventoResponse;
+import terrabuio.heitor.abysslogv2.internal.evento.mapper.EventoMapper;
 import terrabuio.heitor.abysslogv2.internal.expedicao.domain.Expedicao;
 import terrabuio.heitor.abysslogv2.internal.expedicao.dto.request.ExpedicaoRequest;
+import terrabuio.heitor.abysslogv2.internal.expedicao.dto.response.DiarioBordoResponse;
 import terrabuio.heitor.abysslogv2.internal.expedicao.dto.response.ExpedicaoResponse;
 import terrabuio.heitor.abysslogv2.internal.expedicao.mapper.ExpedicaoMapper;
 import terrabuio.heitor.abysslogv2.internal.expedicao.services.ExpedicaoService;
+import terrabuio.heitor.abysslogv2.internal.expedicao.usecases.execucao.AtribuirEvento;
 import terrabuio.heitor.abysslogv2.internal.expedicao.usecases.execucao.IniciarExpedicao;
 import terrabuio.heitor.abysslogv2.internal.expedicao.usecases.execucao.PausarExpedicao;
 import terrabuio.heitor.abysslogv2.internal.expedicao.usecases.finalizacao.FinalizarExpedicao;
+import terrabuio.heitor.abysslogv2.internal.expedicao.usecases.finalizacao.GerarDiarioDeBordo;
 import terrabuio.heitor.abysslogv2.internal.expedicao.usecases.finalizacao.InterromperExpedicao;
 import terrabuio.heitor.abysslogv2.internal.expedicao.usecases.planejamento.RegistrarExpedicao;
 import terrabuio.heitor.abysslogv2.internal.expedicao.usecases.preparacao.AtribuirNavio;
-import terrabuio.heitor.abysslogv2.internal.navio.domain.Navio;
-import terrabuio.heitor.abysslogv2.internal.navio.services.NavioService;
+import terrabuio.heitor.abysslogv2.internal.expedicao.usecases.preparacao.AtribuirTripulante;
+import terrabuio.heitor.abysslogv2.internal.expedicao.usecases.preparacao.RemoverTripulante;
 
 import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/api/v1/expedicoes/")
+@RequestMapping("/api/v1/expedicoes")
 public class ExpedicaoController {
     private final ExpedicaoService crudBasico;
-    private final NavioService navioService;
 
     //USECASES
     private final RegistrarExpedicao registrarExpedicao;
@@ -34,53 +41,109 @@ public class ExpedicaoController {
     private final PausarExpedicao pausarExpedicao;
     private final FinalizarExpedicao finalizarExpedicao;
     private final InterromperExpedicao interromperExpedicao;
-
-
     private final AtribuirNavio atribuirNavio;
+    private final AtribuirTripulante atribuirTripulante;
+    private final RemoverTripulante removerTripulante;
+    private final AtribuirEvento atribuirEvento;
+    private final GerarDiarioDeBordo gerarDiarioDeBordo;
 
-
-    @Operation(summary = "Inicia uma Expedição", description = "Muda o status dela para 'Em Mar' e deixa novas operações serem realizadas, como o cadastro de Eventos")
-    @PostMapping("/{id}/iniciar")
-    public ResponseEntity<Void> iniciar(@PathVariable Long id) {
-        // O Controller apenas delega a responsabilidade
-        iniciarExpedicao.executar(id);
-        return ResponseEntity.noContent().build();
-    }
-    @PostMapping("/{id}/pausar")
-    public ResponseEntity<Void> pausar(@PathVariable Long id) {
-        pausarExpedicao.executar(id);
-        return ResponseEntity.noContent().build();
-    }
-
-    @PostMapping("/{id}/finalizar")
-    public ResponseEntity<Void> finalizar(@PathVariable Long id) {
-        finalizarExpedicao.executar(id);
-        return ResponseEntity.noContent().build();
-    }
-
-    @PostMapping("/{id}/interromper/{evId}")
-    public ResponseEntity<Void> interrompar(@PathVariable Long id,  @PathVariable Long evId) {
-        interromperExpedicao.executar(id,evId);
-        return ResponseEntity.noContent().build();
-    }
-
+    //--Simples GET
     @Operation(summary = "Lista todas as expedições", description = "Retorna um log completo de todas as viagens marítimas registradas no AbyssLog")
     @ApiResponse(responseCode = "200", description = "Lista recuperada com sucesso")
     @GetMapping
     public List<ExpedicaoResponse> listar() {
         return crudBasico.listarTodosResponse();
     }
+    @Operation(summary = "Busca expedição por ID", description = "Retorna os detalhes de uma viagem específica através do seu identificador único.")
+    @ApiResponse(responseCode = "200", description = "Expedição encontrada")
+    @ApiResponse(responseCode = "404", description = "Expedição não encontrada")
+    @GetMapping("/{id}")
+    public ExpedicaoResponse listarPorID(@PathVariable Long id) {
+        return crudBasico.buscarPorIdResponse(id);
+    }
 
+    //--Get Diário de Bordo
+    @Operation(summary = "Gera Diário de Bordo", description = "Compila todos os eventos, tripulantes e dados da jornada em um relatório de finalização.")
+    @ApiResponse(responseCode = "200", description = "Diário gerado com sucesso")
+    @GetMapping("/{id}/gerar-diario-de-bordo")
+    public DiarioBordoResponse gerarDiario(@PathVariable Long id){
+        return gerarDiarioDeBordo.executar(id);
+    }
+
+    //Máquina de Estados
+
+    @Operation(summary = "Inicia uma Expedição", description = "Muda o status dela para 'Em Mar' e deixa novas operações serem realizadas, como o cadastro de Eventos")
+    @ApiResponse(responseCode = "204", description = "Expedição iniciada")
+    @PostMapping("/{id}/iniciar")
+    public ResponseEntity<Void> iniciar(@PathVariable Long id) {
+        iniciarExpedicao.executar(id);
+        return ResponseEntity.noContent().build();
+    }
+    @Operation(summary = "Pausa a Expedição", description = "Suspende temporariamente o progresso da viagem.")
+    @ApiResponse(responseCode = "204", description = "Expedição pausada")
+    @PostMapping("/{id}/pausar")
+    public ResponseEntity<Void> pausar(@PathVariable Long id) {
+        pausarExpedicao.executar(id);
+        return ResponseEntity.noContent().build();
+    }
+
+    @Operation(summary = "Finaliza Expedição", description = "Encerra a viagem com sucesso, mudando o status para 'FINALIZADA'.")
+    @ApiResponse(responseCode = "204", description = "Expedição encerrada")
+    @PostMapping("/{id}/finalizar")
+    public ResponseEntity<Void> finalizar(@PathVariable Long id) {
+        finalizarExpedicao.executar(id);
+        return ResponseEntity.noContent().build();
+    }
+
+    @Operation(summary = "Interrompe Expedição", description = "Encerra a viagem abruptamente devido a um evento crítico (ex: naufrágio).")
+    @ApiResponse(responseCode = "204", description = "Expedição interrompida")
+    @PostMapping("/{id}/interromper/{evId}")
+    public ResponseEntity<Void> interrompar(@PathVariable Long id,  @PathVariable Long evId) {
+        interromperExpedicao.executar(id,evId);
+        return ResponseEntity.noContent().build();
+    }
+    //--Preparação
+    @Operation(summary = "Registra nova expedição", description = "Cria o planejamento inicial de uma viagem (status inicial: PLANEJAMENTO).")
+    @ApiResponse(responseCode = "201", description = "Expedição criada com sucesso")
     @PostMapping("/registrar")
     public ResponseEntity<ExpedicaoResponse> registrarExpedicao(@RequestBody ExpedicaoRequest expedicaoRequest) {
         Expedicao ex = registrarExpedicao.iniciar(expedicaoRequest);
         return ResponseEntity.ok(ExpedicaoMapper.toResponse(ex));
     }
 
-    @PostMapping("/{id}/atribuirNavio/{navioId}")
-    public ResponseEntity<Void> atribuirNavio(@PathVariable long id, @PathVariable long navioId) {
+    @Operation(summary = "Atribui um Navio", description = "Vincula um navio disponível à expedição antes de sua partida.")
+    @ApiResponse(responseCode = "204", description = "Navio atribuído com sucesso")
+    @ApiResponse(responseCode = "400", description = "Navio ou Expedição em estado inválido")
+    @PostMapping("/{id}/atribuir-navio/{navioId}")
+    public ResponseEntity<Void> atribuirNavio(@PathVariable Long id, @PathVariable Long navioId) {
         atribuirNavio.executar(id, navioId);
         return ResponseEntity.noContent().build();
     }
 
+    @Operation(summary = "Adiciona Tripulante", description = "Insere um novo membro na tripulação da expedição.")
+    @ApiResponse(responseCode = "204", description = "Tripulante adicionado")
+    @ApiResponse(responseCode = "400", description = "Tripulante já está vinculado á uma expedição")
+    @PatchMapping("/{id}/atribuir-tripulante/{idTripulante}")
+    public ResponseEntity<Void> atribuirTripulante(@PathVariable Long id, @PathVariable Long idTripulante){
+        atribuirTripulante.executar(id, idTripulante);
+        return ResponseEntity.noContent().build();
+    }
+
+    @Operation(summary = "Remove Tripulante", description = "Remove um membro específico da tripulação atual.")
+    @ApiResponse(responseCode = "204", description = "Tripulante removido")
+    @ApiResponse(responseCode = "400", description = "Remoção não permitida no estado atual do Tripulante, ou Tripulante não está no Navio")
+    @PatchMapping("/{id}/remover-tripulante/{idTripulante}")
+    public ResponseEntity<Void> removerTripulante(@PathVariable Long id, @PathVariable Long idTripulante){
+        removerTripulante.executar(id, idTripulante);
+        return ResponseEntity.noContent().build();
+    }
+
+    @Operation(summary = "Registra um Evento", description = "Adiciona um acontecimento (tempestade, combate, descoberta) ao log da expedição ativa.")
+    @ApiResponse(responseCode = "200", description = "Evento registrado com sucesso")
+    @ApiResponse(responseCode = "400", description = "Dados do evento inválidos ou expedição não está 'Em Mar'")
+    @PostMapping("/{id}/registrar-evento")
+    public ResponseEntity<EventoResponse> registrarEvento(@PathVariable Long id, @Valid @RequestBody EventoRequest eventoRequest) {
+        Evento ev = atribuirEvento.executar(id, eventoRequest);
+        return ResponseEntity.ok(EventoMapper.toResponse(ev));
+    }
 }

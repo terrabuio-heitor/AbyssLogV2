@@ -10,8 +10,6 @@ import terrabuio.heitor.abysslogv2.internal.navio.domain.Navio;
 import terrabuio.heitor.abysslogv2.internal.navio.services.NavioService;
 import terrabuio.heitor.abysslogv2.internal.tripulanteExpedicao.repository.TripulanteExpedicaoRepo;
 
-import java.util.Objects;
-
 @Service
 @RequiredArgsConstructor
 public class AtribuirNavio {
@@ -34,7 +32,7 @@ public class AtribuirNavio {
             throw new RuntimeException("Expedição não encontrada");
         }
         //Vejo se o navio tá ok
-        if(!Objects.equals(navio.getStatus(), "Disponível")){
+        if(navio.getStatus() != Navio.StatusNavio.ATIVO){
             throw new RuntimeException("Navio Indisponível");
         }
 
@@ -44,7 +42,7 @@ public class AtribuirNavio {
 
         expedicao.setNavio(navio);
         expedicao.setStatus(Expedicao.StatusExpedicao.PREPARANDO);
-        navio.setStatus("Ativo");
+        navio.setStatus(Navio.StatusNavio.ATIVO);
 
 
         expedicaoService.atualizar(expedicaoId,expedicao);

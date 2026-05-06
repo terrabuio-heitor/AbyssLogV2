@@ -21,9 +21,8 @@ public class FinalizarExpedicao {
     public void executar(Long IdExpedicao){
         Expedicao ex = expedicaoService.buscarPorId(IdExpedicao);
         validacao(ex);
-        ex.getNavio().getId();
         Navio navio = navioService.buscarPorId(ex.getNavio().getId());
-        navio.setStatus("Disponível");
+        navio.setStatus(Navio.StatusNavio.DISPONIVEL);
         desembarcarTripulacao.executar(ex.getId());
         ex.setDataFim(LocalDate.now());
         ex.setStatus(Expedicao.StatusExpedicao.FINALIZADA);

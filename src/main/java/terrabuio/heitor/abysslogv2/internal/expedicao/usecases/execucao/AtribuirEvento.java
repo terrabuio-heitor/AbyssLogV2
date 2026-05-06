@@ -1,5 +1,6 @@
 package terrabuio.heitor.abysslogv2.internal.expedicao.usecases.execucao;
 
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import terrabuio.heitor.abysslogv2.internal.evento.domain.Evento;
@@ -20,8 +21,9 @@ public class AtribuirEvento {
     private final ExpedicaoService expedicaoService;
     private final MonstroService monstroService;
 
-    public void executar(EventoRequest request){
-        Expedicao ex = expedicaoService.buscarPorId(request.idExpedicao());
+    @Transactional
+    public Evento executar(Long id, EventoRequest request){
+        Expedicao ex = expedicaoService.buscarPorId(id);
         validarEstadoExpedicao(ex);
 
 
@@ -32,7 +34,7 @@ public class AtribuirEvento {
 
         ev.setMonstros(buscarListaMonstros(request));
         ev.setData(request.data() != null ? request.data() : LocalDateTime.now());
-        eventoService.salvar(ev);
+        return eventoService.salvar(ev);
     }
 
     private List<Monstro> buscarListaMonstros(EventoRequest request){

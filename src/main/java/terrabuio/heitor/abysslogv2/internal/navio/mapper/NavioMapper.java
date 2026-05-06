@@ -18,7 +18,7 @@ public class NavioMapper {
         navio.setVelocidade(request.velocidade());
         navio.setResistencia(request.resistencia());
 
-        navio.setStatus("DISPONIVEL");
+        navio.setStatus(Navio.StatusNavio.DISPONIVEL);
         return navio;
     }
     public static NavioResponse toResponse(Navio navio) {
@@ -31,7 +31,7 @@ public class NavioMapper {
                 navio.getVelocidade(),
                 navio.getResistencia(),
                 navio.getAnoFabricacao(),
-                navio.getStatus()
+                navio.getStatus().getDescricao()
         );
     }
 }

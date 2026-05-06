@@ -1,5 +1,6 @@
 package terrabuio.heitor.abysslogv2.internal.navio.domain;
 
+import com.fasterxml.jackson.annotation.JsonValue;
 import jakarta.persistence.*;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
@@ -26,14 +27,21 @@ public class Navio{
 
     private Integer anoFabricacao;
 
+    @Enumerated(EnumType.STRING)
+    @Column(name = "status")
     private StatusNavio status;
 
     @RequiredArgsConstructor
-    private enum StatusNavio{
+    public enum StatusNavio{
         MANUTENCAO ("Em manutenção"),
         ATIVO ("Em Atividade"),
         DISPONIVEL ("Disponível"),
         NAUFRAGADO ("No fundo do Mar");
         private final String descricao;
+
+        @JsonValue
+        public String getDescricao() {
+            return descricao;
+        }
     }
 }

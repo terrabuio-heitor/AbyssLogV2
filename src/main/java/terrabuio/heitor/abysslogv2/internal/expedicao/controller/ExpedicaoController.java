@@ -22,6 +22,7 @@ import terrabuio.heitor.abysslogv2.internal.expedicao.usecases.execucao.PausarEx
 import terrabuio.heitor.abysslogv2.internal.expedicao.usecases.finalizacao.FinalizarExpedicao;
 import terrabuio.heitor.abysslogv2.internal.expedicao.usecases.finalizacao.GerarDiarioDeBordo;
 import terrabuio.heitor.abysslogv2.internal.expedicao.usecases.finalizacao.InterromperExpedicao;
+import terrabuio.heitor.abysslogv2.internal.expedicao.usecases.planejamento.ApagarExpedicao;
 import terrabuio.heitor.abysslogv2.internal.expedicao.usecases.planejamento.RegistrarExpedicao;
 import terrabuio.heitor.abysslogv2.internal.expedicao.usecases.preparacao.AtribuirNavio;
 import terrabuio.heitor.abysslogv2.internal.expedicao.usecases.preparacao.AtribuirTripulante;
@@ -46,6 +47,7 @@ public class ExpedicaoController {
     private final RemoverTripulante removerTripulante;
     private final AtribuirEvento atribuirEvento;
     private final GerarDiarioDeBordo gerarDiarioDeBordo;
+    private final ApagarExpedicao apagarExpedicao;
 
     //--Simples GET
     @Operation(summary = "Lista todas as expedições", description = "Retorna um log completo de todas as viagens marítimas registradas no AbyssLog")
@@ -108,7 +110,7 @@ public class ExpedicaoController {
     @PostMapping("/registrar")
     public ResponseEntity<ExpedicaoResponse> registrarExpedicao(@RequestBody ExpedicaoRequest expedicaoRequest) {
         Expedicao ex = registrarExpedicao.iniciar(expedicaoRequest);
-        return ResponseEntity.ok(ExpedicaoMapper.toResponse(ex));
+        return ResponseEntity.status(201).body(ExpedicaoMapper.toResponse(ex));
     }
 
     @Operation(summary = "Atribui um Navio", description = "Vincula um navio disponível à expedição antes de sua partida.")
@@ -139,11 +141,20 @@ public class ExpedicaoController {
     }
 
     @Operation(summary = "Registra um Evento", description = "Adiciona um acontecimento (tempestade, combate, descoberta) ao log da expedição ativa.")
-    @ApiResponse(responseCode = "200", description = "Evento registrado com sucesso")
+    @ApiResponse(responseCode = "201", description = "Evento registrado com sucesso")
     @ApiResponse(responseCode = "400", description = "Dados do evento inválidos ou expedição não está 'Em Mar'")
     @PostMapping("/{id}/registrar-evento")
     public ResponseEntity<EventoResponse> registrarEvento(@PathVariable Long id, @Valid @RequestBody EventoRequest eventoRequest) {
         Evento ev = atribuirEvento.executar(id, eventoRequest);
         return ResponseEntity.ok(EventoMapper.toResponse(ev));
+    }
+
+    @Operation(summary = "Apaga uma Expedição", description = "Remove ela completamente dos registros, mas para isso deve ela não deve ter iniciado")
+    @ApiResponse(responseCode = "204", description = "Expedição apagada completamente")
+    @ApiResponse(responseCode = "400", description = "Expedição não pod")
+    @DeleteMapping("/{id}/remover")
+    public ResponseEntity<Void> apagarExpedicao(@PathVariable Long id) {
+        apagarExpedicao.executar(id);
+        return ResponseEntity.noContent().build();
     }
 }

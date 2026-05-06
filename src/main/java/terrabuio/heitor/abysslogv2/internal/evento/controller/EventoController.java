@@ -38,7 +38,7 @@ public class EventoController {
     public ResponseEntity<Evento> atualizar(@PathVariable Long id, @RequestBody @Valid Evento evento) {
         return ResponseEntity.ok(eventoService.atualizar(id, evento));
     }
-    @PostMapping("/{idExpedicao}")
+    @PostMapping("/{idExpedicao}/registrar")
     public EventoResponse iniciar(@RequestBody @Valid EventoRequest request, @PathVariable Long idExpedicao) {
         Expedicao expedicao = expedicaoService.buscarPorId(idExpedicao);
 

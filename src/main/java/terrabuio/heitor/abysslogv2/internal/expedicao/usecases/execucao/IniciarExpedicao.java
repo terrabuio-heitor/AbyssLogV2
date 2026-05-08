@@ -25,7 +25,7 @@ public class IniciarExpedicao {
         if(expedicao.getStatus() != Expedicao.StatusExpedicao.PREPARANDO && Expedicao.StatusExpedicao.PARADA != expedicao.getStatus()){
             throw new RuntimeException("Expedição não pode ser iniciada");
         }
-        if(tripulantes > 1){
+        if(tripulantes < 1){
             throw new RuntimeException("Navio com fantasmas como tripulantes não zarpa do porto amigo");
         }
         if (expedicao.getStatus() == Expedicao.StatusExpedicao.PREPARANDO) {

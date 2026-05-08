@@ -20,7 +20,7 @@ public class RegistrarExpedicao {
         Navio navio = null;
         if (request.idNavio() != null) {
             navio = navioService.buscarPorId(request.idNavio());
-            if (!(navio.getStatus() == Navio.StatusNavio.ATIVO)) {
+            if (navio.getStatus() == Navio.StatusNavio.ATIVO) {
                 throw new RuntimeException("Navio " + navio.getNome() + " não está disponível no momento");
             }
         }

@@ -31,7 +31,7 @@ public class Expedicao {
     private String nome;
 
     @ManyToOne
-    @JoinColumn(name = "navio_id", nullable = false)
+    @JoinColumn(name = "navio_id")
     @JsonManagedReference
     private Navio navio;
 

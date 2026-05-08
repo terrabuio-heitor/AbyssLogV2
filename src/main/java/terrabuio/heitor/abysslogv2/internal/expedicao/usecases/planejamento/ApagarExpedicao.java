@@ -20,10 +20,5 @@ public class ApagarExpedicao {
             throw new RuntimeException("Expedição já saio do papel");
         }
         expedicaoService.deletar(expedicaoId);
-
-
-
-
-        expedicaoService.deletar(expedicaoId);
     }
 }

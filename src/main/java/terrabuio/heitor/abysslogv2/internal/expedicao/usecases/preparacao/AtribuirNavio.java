@@ -18,34 +18,46 @@ public class AtribuirNavio {
 
     private final TripulanteExpedicaoRepo teRepo;
     @Transactional
-    public void executar(Long navioId, Long expedicaoId){
+    public void executar(Long expedicaoId, Long navioId){
+        System.out.println("DEBUG: Tentando atribuir Navio ID " + navioId + " na Expedição ID " + expedicaoId);
+        Expedicao ex = expedicaoService.buscarPorId(expedicaoId);
         Navio navio = navioService.buscarPorId(navioId);
-        Expedicao expedicao = expedicaoService.buscarPorId(expedicaoId);
-        long tripulantes = teRepo.countByExpedicaoIdAndAtivoTrue(expedicaoId);
+        long tripulantesAtuais = teRepo.countByExpedicaoIdAndAtivoTrue(expedicaoId);
 
         //Validação Basica
         if (navio == null) {
             throw new RuntimeException("Navio não encontrado");
         }
 
-        if (expedicao == null) {
+        if (ex == null) {
             throw new RuntimeException("Expedição não encontrada");
         }
-        //Vejo se o navio tá ok
-        if(navio.getStatus() != Navio.StatusNavio.ATIVO){
-            throw new RuntimeException("Navio Indisponível");
+
+        if (ex.getStatus() != Expedicao.StatusExpedicao.PLANEJADA &&
+                ex.getStatus() != Expedicao.StatusExpedicao.PREPARANDO) {
+            throw new RuntimeException("Não é possível alterar o navio de uma expedição em " + ex.getStatus().getDescricao());
         }
 
-        if (tripulantes > navio.getCapacidadeTripulacao()) {
+        //Vejo se o navio tá ok
+        if(navio.getStatus() != Navio.StatusNavio.DISPONIVEL){
+            throw new RuntimeException("Navio " + navio.getNome() + " não está disponível (Status: " + navio.getStatus().getDescricao() + ")");        }
+
+        if (tripulantesAtuais > navio.getCapacidadeTripulacao()) {
             throw new RuntimeException("Novo navio não suporta a tripulação atual");
         }
 
-        expedicao.setNavio(navio);
-        expedicao.setStatus(Expedicao.StatusExpedicao.PREPARANDO);
+        if (ex.getNavio() != null && !ex.getNavio().equals(navio)) {
+            Navio navioAntigo = ex.getNavio();
+            navioAntigo.setStatus(Navio.StatusNavio.DISPONIVEL);
+            navioService.salvar(navioAntigo);
+        }
+
+        ex.setNavio(navio);
+        ex.setStatus(Expedicao.StatusExpedicao.PREPARANDO);
         navio.setStatus(Navio.StatusNavio.ATIVO);
 
 
-        expedicaoService.atualizar(expedicaoId,expedicao);
         navioService.salvar(navio);
+        expedicaoService.atualizar(expedicaoId,ex);
     }
 }

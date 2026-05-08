@@ -27,7 +27,7 @@ public class InterromperExpedicao {
         finalizarExpedicao.validacao(ex);
         Evento ev = eventoService.buscarPorId(eventoId);
         switch (ev.getTipo()) {
-            case "Naúfragio":
+            case "Naufrágio":
                 navioService.buscarPorId(ex.getNavio().getId()).setStatus(Navio.StatusNavio.NAUFRAGADO);
                 ex.setStatus(Expedicao.StatusExpedicao.INTERROMPIDA);
                 ex.setDataFim(LocalDate.now());

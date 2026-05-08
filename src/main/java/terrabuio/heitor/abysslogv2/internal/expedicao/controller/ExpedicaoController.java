@@ -58,7 +58,7 @@ public class ExpedicaoController {
     }
     @Operation(summary = "Busca expedição por ID", description = "Retorna os detalhes de uma viagem específica através do seu identificador único.")
     @ApiResponse(responseCode = "200", description = "Expedição encontrada")
-    @ApiResponse(responseCode = "404", description = "Expedição não encontrada")
+    @ApiResponse(responseCode = "404", description = "Registro da Expedição não encontrado")
     @GetMapping("/{id}")
     public ExpedicaoResponse listarPorID(@PathVariable Long id) {
         return crudBasico.buscarPorIdResponse(id);
@@ -151,7 +151,7 @@ public class ExpedicaoController {
 
     @Operation(summary = "Apaga uma Expedição", description = "Remove ela completamente dos registros, mas para isso deve ela não deve ter iniciado")
     @ApiResponse(responseCode = "204", description = "Expedição apagada completamente")
-    @ApiResponse(responseCode = "400", description = "Expedição não pod")
+    @ApiResponse(responseCode = "400", description = "Não se pode apagar um registro histórico, essa viagem já teve ")
     @DeleteMapping("/{id}/remover")
     public ResponseEntity<Void> apagarExpedicao(@PathVariable Long id) {
         apagarExpedicao.executar(id);

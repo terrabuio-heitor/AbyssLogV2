@@ -26,6 +26,7 @@ public class ExpedicaoControllerLegacy {
 
     //CRUD FUNCIONAL E Básico
 
+    @Deprecated
     @GetMapping
     public List<ExpedicaoResponse> listar() {
         return expedicaoService.listarTodos()
@@ -33,13 +34,13 @@ public class ExpedicaoControllerLegacy {
                 .map(ExpedicaoMapper::toResponse)
                 .toList();
     }
-
+    @Deprecated
     @GetMapping("/{id}")
     public ResponseEntity<ExpedicaoResponse> buscarPorId(@PathVariable Long id) {
         Expedicao expedicao = expedicaoService.buscarPorId(id);
         return ResponseEntity.ok(ExpedicaoMapper.toResponse(expedicao));
     }
-
+    @Deprecated
     @PostMapping
     public ExpedicaoResponse iniciar(@RequestBody @Valid ExpedicaoRequest request){
         Navio navio = navioService.buscarPorId(request.idNavio());
@@ -50,12 +51,12 @@ public class ExpedicaoControllerLegacy {
         
         return ExpedicaoMapper.toResponse(salva);
     }
-
+    @Deprecated
     @PutMapping("/{id}")
     public ResponseEntity<Expedicao> atualizar(@PathVariable Long id, @RequestBody @Valid Expedicao expedicao) {
         return ResponseEntity.ok(expedicaoService.atualizar(id, expedicao));
     }
-
+    @Deprecated
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> encerrar(@PathVariable Long id) {
         expedicaoService.deletar(id);

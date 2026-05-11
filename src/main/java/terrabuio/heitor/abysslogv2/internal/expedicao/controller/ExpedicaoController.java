@@ -64,6 +64,14 @@ public class ExpedicaoController {
         return crudBasico.buscarPorIdResponse(id);
     }
 
+    @Operation(summary = "Um simples PUT, para alterar a expedição")
+    //Simples PUT do CRUD
+    @PutMapping("/{id}/atualizar")
+    public Expedicao atualizar(@PathVariable Long id, @RequestBody @Valid Expedicao expedicao) {
+        return crudBasico.atualizar(id, expedicao);
+    }
+
+
     //--Get Diário de Bordo
     @Operation(summary = "Gera Diário de Bordo", description = "Compila todos os eventos, tripulantes e dados da jornada em um relatório de finalização.")
     @ApiResponse(responseCode = "200", description = "Diário gerado com sucesso")

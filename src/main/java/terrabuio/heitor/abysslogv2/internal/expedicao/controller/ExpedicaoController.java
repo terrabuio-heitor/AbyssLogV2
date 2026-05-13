@@ -2,6 +2,7 @@ package terrabuio.heitor.abysslogv2.internal.expedicao.controller;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -23,6 +24,7 @@ import terrabuio.heitor.abysslogv2.internal.expedicao.usecases.finalizacao.Final
 import terrabuio.heitor.abysslogv2.internal.expedicao.usecases.finalizacao.GerarDiarioDeBordo;
 import terrabuio.heitor.abysslogv2.internal.expedicao.usecases.finalizacao.InterromperExpedicao;
 import terrabuio.heitor.abysslogv2.internal.expedicao.usecases.planejamento.ApagarExpedicao;
+import terrabuio.heitor.abysslogv2.internal.expedicao.usecases.planejamento.AtualizarExpedicao;
 import terrabuio.heitor.abysslogv2.internal.expedicao.usecases.planejamento.RegistrarExpedicao;
 import terrabuio.heitor.abysslogv2.internal.expedicao.usecases.preparacao.AtribuirNavio;
 import terrabuio.heitor.abysslogv2.internal.expedicao.usecases.preparacao.AtribuirTripulante;
@@ -48,6 +50,7 @@ public class ExpedicaoController {
     private final AtribuirEvento atribuirEvento;
     private final GerarDiarioDeBordo gerarDiarioDeBordo;
     private final ApagarExpedicao apagarExpedicao;
+    private final AtualizarExpedicao atualizarExpedicao;
 
     //--Simples GET
     @Operation(summary = "Lista todas as expedições", description = "Retorna um log completo de todas as viagens marítimas registradas no AbyssLog")
@@ -64,11 +67,20 @@ public class ExpedicaoController {
         return crudBasico.buscarPorIdResponse(id);
     }
 
-    @Operation(summary = "Um simples PUT, para alterar a expedição")
-    //Simples PUT do CRUD
-    @PutMapping("/{id}/atualizar")
-    public Expedicao atualizar(@PathVariable Long id, @RequestBody @Valid Expedicao expedicao) {
-        return crudBasico.atualizar(id, expedicao);
+
+    //--O Patch
+    @Operation(
+            summary = "Atualiza campos específicos de uma expedição",
+            description = "Permite alterar nome, capitão ou data de início de forma independente. Campos nulos no request não serão alterados no banco."
+    )
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Expedição atualizada com sucesso"),
+            @ApiResponse(responseCode = "400", description = "Dados inválidos ou regra de cronologia violada"),
+            @ApiResponse(responseCode = "404", description = "Expedição não encontrada")
+    })
+    @PatchMapping("/{id}")
+    public ExpedicaoResponse atualizar(@PathVariable Long id, @RequestBody @Valid ExpedicaoRequest expedicaoRequest) {
+        return atualizarExpedicao.executar(id, expedicaoRequest);
     }
 
 

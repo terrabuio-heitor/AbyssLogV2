@@ -16,7 +16,7 @@ public class NavioMapper {
         navio.setCapacidadeTripulacao(request.capacidadeTripulacao());
         navio.setCapacidadeCarga(request.capacidadeCarga());
         navio.setVelocidade(request.velocidade());
-        navio.setResistencia(request.resistencia());
+        navio.setResistenciaMaxima(request.resistencia());
 
         navio.setStatus(Navio.StatusNavio.DISPONIVEL);
         return navio;
@@ -29,7 +29,7 @@ public class NavioMapper {
                 navio.getCapacidadeTripulacao(),
                 navio.getCapacidadeCarga(),
                 navio.getVelocidade(),
-                navio.getResistencia(),
+                navio.getResistenciaMaxima(),
                 navio.getAnoFabricacao(),
                 navio.getStatus().getDescricao()
         );

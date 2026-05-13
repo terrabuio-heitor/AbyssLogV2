@@ -23,7 +23,10 @@ public class Navio{
 
     private Integer velocidade;
 
-    private Integer resistencia;
+    private Integer resistenciaMaxima;
+    private Integer resistenciaAtual;
+    private Integer defesa;
+
 
     private Integer anoFabricacao;
 
@@ -44,4 +47,6 @@ public class Navio{
             return descricao;
         }
     }
+    @ManyToOne(fetch = FetchType.LAZY)
+    TipoNavio tipoNavio;
 }

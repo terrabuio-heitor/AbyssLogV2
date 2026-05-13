@@ -45,7 +45,7 @@ public class NavioService {
         navioExistente.setCapacidadeTripulacao(dadosAtualizados.getCapacidadeTripulacao());
         navioExistente.setCapacidadeCarga(dadosAtualizados.getCapacidadeCarga());
         navioExistente.setVelocidade(dadosAtualizados.getVelocidade());
-        navioExistente.setResistencia(dadosAtualizados.getResistencia());
+        navioExistente.setResistenciaMaxima(dadosAtualizados.getResistenciaMaxima());
         navioExistente.setStatus(dadosAtualizados.getStatus());
 
         return navioRepo.save(navioExistente);

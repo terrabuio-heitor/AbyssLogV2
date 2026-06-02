@@ -1,24 +1,24 @@
 package terrabuio.heitor.abysslogv2.internal.navio.mapper;
 
 import terrabuio.heitor.abysslogv2.internal.navio.domain.Navio;
+
 import terrabuio.heitor.abysslogv2.internal.navio.dto.request.NavioRequest;
 import terrabuio.heitor.abysslogv2.internal.navio.dto.response.NavioResponse;
 
 
 public class NavioMapper {
     public static Navio toEntity(NavioRequest request) {
-        Navio navio = new Navio();
-        navio.setNome(request.nome());
+        Navio navio = Navio.criarNovoNavio(
+                request.nome(),
+                request.tipoNavioId(),
+                request.qualidade(),
+                request.anoFabricacao()
+        );
+        navio.setDefesa(request.defesa());
 
-        navio.setTipo(request.tipo());
-        navio.setAnoFabricacao(request.anoFabricacao());
-
-        navio.setCapacidadeTripulacao(request.capacidadeTripulacao());
-        navio.setCapacidadeCarga(request.capacidadeCarga());
-        navio.setVelocidade(request.velocidade());
-        navio.setResistenciaMaxima(request.resistencia());
-
-        navio.setStatus(Navio.StatusNavio.DISPONIVEL);
+        // Mantemos o campo string legado sincronizado para não quebrar consultas antigas de imediato
+        //navio.setTipo(tipoNavio.getNome());
+        navio.calcularAtributosIniciais();
         return navio;
     }
     public static NavioResponse toResponse(Navio navio) {

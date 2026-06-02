@@ -13,7 +13,7 @@ public record ExpedicaoRequest(
         Long idNavio,
         @NotBlank(message = "O capitão é obrigatório")
         String capitao,
-        @NotNull(message = "A data de início é obrigatória")
+        //@NotNull(message = "A data de início é obrigatória")
         LocalDate dataInicio
         //Expedicao.StatusExpedicao status
         //String status

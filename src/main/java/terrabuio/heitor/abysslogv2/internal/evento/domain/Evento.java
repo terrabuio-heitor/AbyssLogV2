@@ -20,12 +20,12 @@ public class Evento{
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @NotBlank(message = "Deve haver tipo")
     private String tipo;
 
-    @NotBlank(message = "Deve haver tipo")
+    @NotNull(message = "Deve haver descrição")
     private String descricao ;
 
-    @NotNull(message = "Deve haver descrição")
     private java.time.LocalDateTime data;
 
     @ManyToOne

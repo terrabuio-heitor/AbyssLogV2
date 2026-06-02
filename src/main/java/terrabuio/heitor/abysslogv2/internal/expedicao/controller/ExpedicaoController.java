@@ -120,7 +120,7 @@ public class ExpedicaoController {
     @Operation(summary = "Interrompe Expedição", description = "Encerra a viagem abruptamente devido a um evento crítico (ex: naufrágio).")
     @ApiResponse(responseCode = "204", description = "Expedição interrompida")
     @PostMapping("/{id}/interromper/{evId}")
-    public ResponseEntity<Void> interrompar(@PathVariable Long id,  @PathVariable Long evId) {
+    public ResponseEntity<Void> interromper(@PathVariable Long id,  @PathVariable Long evId) {
         interromperExpedicao.executar(id,evId);
         return ResponseEntity.noContent().build();
     }

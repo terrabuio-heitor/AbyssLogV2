@@ -1,19 +1,15 @@
 package terrabuio.heitor.abysslogv2.internal.expedicao.domain;
 
 import java.time.LocalDate;
-import java.util.Date;
 import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
-import jdk.jfr.Registered;
 import lombok.Data;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
-import org.hibernate.annotations.JdbcType;
 import terrabuio.heitor.abysslogv2.internal.navio.domain.Navio;
 import terrabuio.heitor.abysslogv2.internal.evento.domain.Evento;
 

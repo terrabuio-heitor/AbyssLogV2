@@ -5,6 +5,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import terrabuio.heitor.abysslogv2.internal.navio.domain.Navio;
+import terrabuio.heitor.abysslogv2.internal.navio.domain.TipoNavio;
 import terrabuio.heitor.abysslogv2.internal.navio.dto.request.NavioRequest;
 import terrabuio.heitor.abysslogv2.internal.navio.dto.response.NavioResponse;
 import terrabuio.heitor.abysslogv2.internal.navio.mapper.NavioMapper;
@@ -35,8 +36,9 @@ public class NavioController {
         return ResponseEntity.ok(NavioMapper.toResponse(navio));
     }
     @PostMapping
-    public NavioResponse criar(@RequestBody @Valid NavioRequest request){
-        Navio navio = NavioMapper.toEntity(request);
+    public NavioResponse criar(@RequestBody @Valid NavioRequest request, @RequestParam Long tipoNavioId){
+        TipoNavio tipoNavio= navioService.buscaTipoPorID(tipoNavioId);
+        Navio navio = NavioMapper.toEntity(request, tipoNavio);
 
         Navio salva = navioService.salvar(navio);
 

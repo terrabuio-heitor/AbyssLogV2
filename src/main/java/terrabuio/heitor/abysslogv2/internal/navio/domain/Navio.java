@@ -76,7 +76,6 @@ public class Navio{
         }
     }
 
-    //GAMBIARRA ESSE
     public static Navio criarNovoNavio(String nome, TipoNavio tipo, QualidadeNavio qualidade, Integer anoFabricacao) {
         Navio navio = new Navio();
         navio.setNome(nome);

@@ -26,7 +26,7 @@ public class NavioMapper {
         return new NavioResponse(
                 navio.getId(),
                 navio.getNome(),
-                navio.getTipo(),
+                navio.getTipoNavio().getNome(),
                 navio.getCapacidadeTripulacao(),
                 navio.getCapacidadeCarga(),
                 navio.getVelocidade(),

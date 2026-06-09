@@ -1,7 +1,6 @@
 package terrabuio.heitor.abysslogv2.internal.navio.domain;
 
 import com.fasterxml.jackson.annotation.JsonValue;
-import jakarta.annotation.Nullable;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;

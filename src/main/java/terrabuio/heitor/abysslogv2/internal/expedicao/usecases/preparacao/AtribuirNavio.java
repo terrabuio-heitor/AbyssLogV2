@@ -24,11 +24,6 @@ public class AtribuirNavio {
         Navio navio = navioService.buscarPorId(navioId);
         long tripulantesAtuais = teRepo.countByExpedicaoIdAndAtivoTrue(expedicaoId);
 
-        //Validação Basica
-        if (navio == null) {
-            throw new RuntimeException("Navio não encontrado");
-        }
-
         if (ex == null) {
             throw new RuntimeException("Expedição não encontrada");
         }

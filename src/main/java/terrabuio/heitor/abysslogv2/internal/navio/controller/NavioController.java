@@ -36,8 +36,8 @@ public class NavioController {
         return ResponseEntity.ok(NavioMapper.toResponse(navio));
     }
     @PostMapping
-    public NavioResponse criar(@RequestBody @Valid NavioRequest request, @RequestParam Long tipoNavioId){
-        TipoNavio tipoNavio= navioService.buscaTipoPorID(tipoNavioId);
+    public NavioResponse criar(@RequestBody @Valid NavioRequest request){
+        TipoNavio tipoNavio= navioService.buscaTipoPorID(request.tipoNavioId());
         Navio navio = NavioMapper.toEntity(request, tipoNavio);
 
         Navio salva = navioService.salvar(navio);
